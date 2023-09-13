@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quiz</title>
+    <link rel="stylesheet" href="QUIZ.css">
+</head>
+<body>
+    <div class="quiz-container">
+        <h1>Quiz</h1>
+        <input type="text" id="playerName" placeholder="Seu Nome">
+        <div id="quiz">
+            <p id="question">Pergunta aqui?</p>
+            <div id="options">
+                <button class="option" onclick="checkAnswer(this)">Opção 1</button>
+                <button class="option" onclick="checkAnswer(this)">Opção 2</button>
+                <button class="option" onclick="checkAnswer(this)">Opção 3</button>
+            </div>
+            <p id="score">Pontuação: 0</p>
+            <button id="submitButton" onclick="showResult()">Enviar</button>
+        </div>
+        <div id="ranking" style="display: none;">
+            <h2>Ranking</h2>
+            <ol id="rankingList"></ol>
+        </div>
+    </div>
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    <script src="QUIZ.js"></script>
+</body>
+</html>
