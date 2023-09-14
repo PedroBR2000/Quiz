@@ -168,5 +168,5 @@ function showResult() {
     
     rankingList.appendChild(userScoreElement);
     
-    rankingContainer.style.display = "block";
+    rankingContainer.style.display = "none";
 }
