@@ -76,45 +76,94 @@ const questions = [
     },
 ];
 
+const rankingData = []; // Armazenar os dados do ranking
+
 let currentQuestionIndex = 0;
 let score = 0;
-let userName = "";
+let userEmail = ""; // Variável para armazenar o nome completo do usuário
+let isLoggedIn = false;
 
 const questionsContainer = document.getElementById("questions-container");
 const scoreElement = document.getElementById("score");
 
-const nameInput = document.getElementById("name");
-const startButton = document.querySelector("button");
-const quizContainer = document.querySelector(".quiz-container");
+const emailInput = document.getElementById("email");
+const passwordInput = document.getElementById("password");
+const loginButton = document.querySelector(".login-container button");
+const quizContainer = document.getElementById("quiz-container");
+const submitButton = document.getElementById("submit-button");
+const rankingContainer = document.getElementById("ranking-container");
+const rankingList = document.getElementById("ranking-list");
 
-startButton.disabled = true;
-quizContainer.style.display = "none";
+loginButton.disabled = true; // Desativa o botão "Login"
+quizContainer.style.display = "none"; // Oculta a seção do quiz
+rankingContainer.style.display = "none"; // Oculta a seção de ranking
 
-function startQuiz() {
-    const name = nameInput.value.trim();
-    
-    if (name === "") {
-        alert("Por favor, digite seu nome antes de iniciar o quiz.");
-    } else {
-        userName = name;
-        nameInput.disabled = true;
-        startButton.style.display = "none";
+
+// Lista de emails e senhas
+const users = [
+    { email: "pedro.pereira63@portalsesisp.org.br", password: "12345678" },
+    { email: "vinicius.vasiliauskas@portalsesisp.org.br", password: "12345678" },
+    { email: "gabrielly.almeida@portalsesisp.org.br", password: "12345678" },
+    { email: "ana.borbalan@portalsesisp.org.br", password: "12345678" },
+    { email: "sthefany.souza@portalsesisp.org.br", password: "12345678" },
+    { email: "otavio.miranda3@portalsesisp.org.br", password: "12345678" },
+    { email: "maria.spontao@portalsesisp.org.br", password: "12345678" },
+    { email: "guilherme.moura3@portalsesisp.org.br", password: "12345678" },
+    { email: "laysa.veras@portalsesisp.org.br", password: "12345678" },
+    { email: "giovanni.sthal@portalsesisp.org.br", password: "12345678" },
+    { email: "eduardo.lopes@portalsesisp.org.br", password: "12345678" },
+    { email: "pedro.oliveira18@portalsesisp.org.br", password: "12345678" },
+    { email: "yasmin.santos47@portalsesisp.org.br", password: "12345678" },
+    { email: "livia.rocha8@portalsesisp.org.br", password: "12345678" },
+    { email: "ana.apolinario@portalsesisp.org.br", password: "12345678" },
+    { email: "daniel.caetano@portalsesisp.org.br", password: "12345678" },
+    { email: "talita.marcelino@portalsesisp.org.br", password: "12345678" },
+    { email: "matheus.barbosa9@portalsesisp.org.br", password: "12345678" },
+    { email: "kaua.pereira6@portalsesisp.org.br", password: "12345678" },
+    { email: "gustavo.lauria@portalsesisp.org.br", password: "12345678" },
+    { email: "matheus.andrade2@portalsesisp.org.br", password: "12345678" },
+    { email: "livia.silva85@portalsesisp.org.br", password: "12345678" },
+    { email: "kaleb.gaspar@portalsesisp.org.br", password: "12345678" },
+    { email: "bianca.mafra@portalsesisp.org.br", password: "12345678" }
+];
+
+function login() {
+    const email = emailInput.value.trim();
+    const password = passwordInput.value.trim();
+
+    // Verifica se o email e a senha correspondem a um usuário
+    const user = users.find(user => user.email === email && user.password === password);
+
+    if (user) {
+        userEmail = user.email; // Armazena o email do usuário
+        isLoggedIn = true;
+        emailInput.disabled = true; // Desativa o campo de email após o login
+        passwordInput.disabled = true; // Desativa o campo de senha após o login
+        loginButton.style.display = "none"; // Oculta o botão "Login"
         
+        // Exibe a seção do quiz
         quizContainer.style.display = "block";
 
+        // Carrega as questões e inicia o quiz
         loadQuestions();
+    } else {
+        alert("Email ou senha incorretos. Tente novamente.");
     }
 }
 
-nameInput.addEventListener("input", () => {
-    if (nameInput.value.trim() !== "") {
-        startButton.disabled = false;
+emailInput.addEventListener("input", () => {
+    if (emailInput.value.trim() !== "") {
+        loginButton.disabled = false; // Ativa o botão "Login" quando o email é inserido
     } else {
-        startButton.disabled = true;
+        loginButton.disabled = true; // Desativa o botão se o email for removido
     }
 });
 
 function loadQuestions() {
+    if (!isLoggedIn) {
+        return; // Não carrega as questões se o usuário não estiver logado
+    }
+
     questionsContainer.innerHTML = "";
 
     questions.forEach((question, index) => {
@@ -140,9 +189,16 @@ function loadQuestions() {
 
         questionsContainer.appendChild(questionDiv);
     });
+
+    // Exibe o botão "Verificar Respostas" após carregar as questões
+    submitButton.style.display = "block";
 }
 
 function checkAnswers() {
+    if (!isLoggedIn) {
+        return; // Não verifica as respostas se o usuário não estiver logado
+    }
+
     questions.forEach((question, index) => {
         const selectedOption = document.querySelector(`input[name="answer-${index}"]:checked`);
 
@@ -151,22 +207,29 @@ function checkAnswers() {
         }
     });
 
+    // Registra a pontuação no rankingData
+    rankingData.push({ name: userEmail, score: score });
+
     showResult();
 }
 
 function showResult() {
-    questionsContainer.style.display = "none";
+    questionsContainer.style.display = "none"; // Oculta as questões após verificar respostas
     scoreElement.textContent = `Pontuação: ${score} de ${questions.length}`;
 
-    const rankingContainer = document.getElementById("ranking-container");
-    const rankingList = document.getElementById("ranking-list");
+    // Exibe o ranking
+    rankingList.innerHTML = ""; // Limpa a lista de classificação
     
-    rankingList.innerHTML = "";
+    rankingData.sort((a, b) => b.score - a.score); // Classifica os participantes com base na pontuação
+
+    rankingData.forEach((participant, index) => {
+        const userScoreElement = document.createElement("li");
+        userScoreElement.textContent = `${index + 1}. ${participant.name}: ${participant.score} de ${questions.length}`;
+        rankingList.appendChild(userScoreElement);
+    });
     
-    const userScoreElement = document.createElement("li");
-    userScoreElement.textContent = `${userName}: ${score} de ${questions.length}`;
-    
-    rankingList.appendChild(userScoreElement);
-    
-    rankingContainer.style.display = "block";
+    rankingContainer.style.display = "block"; // Exibe a seção de ranking
+
+    // Oculta o botão "Verificar Respostas"
+    submitButton.style.display = "none";
 }
