@@ -80,7 +80,7 @@ const rankingData = []; // Armazenar os dados do ranking
 
 let currentQuestionIndex = 0;
 let score = 0;
-let userEmail = ""; // Variável para armazenar o nome completo do usuário
+let userEmail = ""; // Variável para armazenar o nome do usuário
 let isLoggedIn = false;
 
 const questionsContainer = document.getElementById("questions-container");
@@ -135,12 +135,16 @@ function login() {
     const user = users.find(user => user.email === email && user.password === password);
 
     if (user) {
-        userEmail = user.email; // Armazena o email do usuário
+        // Extrai os dois primeiros nomes do email, separados por um ponto
+        const emailParts = user.email.split('@')[0].split('.');
+        const userName = emailParts[0];
+        const userLastName = emailParts[1];
+        userEmail = `${userName}.${userLastName}`; // Combina os dois primeiros nomes
         isLoggedIn = true;
         emailInput.disabled = true; // Desativa o campo de email após o login
         passwordInput.disabled = true; // Desativa o campo de senha após o login
         loginButton.style.display = "none"; // Oculta o botão "Login"
-        
+
         // Exibe a seção do quiz
         quizContainer.style.display = "block";
 
@@ -192,6 +196,9 @@ function loadQuestions() {
 
     // Exibe o botão "Verificar Respostas" após carregar as questões
     submitButton.style.display = "block";
+
+    // Oculta a seção de login após o início do quiz
+    document.querySelector(".login-container").style.display = "none";
 }
 
 function checkAnswers() {
@@ -219,7 +226,7 @@ function showResult() {
 
     // Exibe o ranking
     rankingList.innerHTML = ""; // Limpa a lista de classificação
-    
+
     rankingData.sort((a, b) => b.score - a.score); // Classifica os participantes com base na pontuação
 
     rankingData.forEach((participant, index) => {
@@ -227,7 +234,7 @@ function showResult() {
         userScoreElement.textContent = `${index + 1}. ${participant.name}: ${participant.score} de ${questions.length}`;
         rankingList.appendChild(userScoreElement);
     });
-    
+
     rankingContainer.style.display = "block"; // Exibe a seção de ranking
 
     // Oculta o botão "Verificar Respostas"
