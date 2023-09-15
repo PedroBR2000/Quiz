@@ -6,15 +6,7 @@ body {
     background-color: #f0f0f0;
 }
 
-.container {
-    max-width: 600px;
-    margin: 0 auto;
-    padding: 20px;
-    background-color: #fff;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
-}
-
-h1 {
+.quiz-title h1 {
     text-align: center;
     background-color: #3498db;
     color: #fff;
@@ -23,14 +15,15 @@ h1 {
 }
 
 /* Estilos para a tela de login */
-.login-container {
+.name-series-container {
     text-align: center;
     padding: 20px;
 }
 
-.login-container label,
-.login-container input,
-.login-container button {
+.name-series-container label,
+.name-series-container input,
+.name-series-container select,
+.name-series-container button {
     display: block;
     margin: 10px auto;
     width: 100%;
@@ -39,7 +32,7 @@ h1 {
     font-size: 16px;
 }
 
-.login-container button {
+.name-series-container button {
     background-color: #3498db;
     color: #fff;
     border: none;
@@ -47,7 +40,7 @@ h1 {
     transition: background-color 0.3s;
 }
 
-.login-container button:hover {
+.name-series-container button:hover {
     background-color: #2980b9;
 }
 
@@ -68,19 +61,46 @@ h1 {
     transition: background-color 0.3s;
 }
 
-.quiz-container button:hover {
-    background-color: #2980b9;
-}
-
 /* Estilos para o ranking */
 #ranking-container {
     text-align: center;
-    padding: 20px;
+    padding: 10px; /* Reduz o espaçamento interno */
+    background-color: #ffffff; /* Cor de fundo do contêiner de ranking */
+    border-radius: 10px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+    width: 80%; /* Define uma largura máxima para o ranking */
+    margin: 0 auto; /* Centraliza horizontalmente */
 }
 
 #ranking-list {
     list-style: none;
     padding: 0;
+}
+
+#ranking-list li {
+    margin: 10px 0;
+    padding: 10px;
+    background-color: #ffffff; /* Cor de fundo dos itens do ranking */
+    border-radius: 5px;
+    box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+/* Estilos para cada item do ranking */
+#ranking-list li h3 {
+    margin: 0;
+}
+
+#ranking-list li p {
+    margin: 0;
+    font-weight: bold;
+    color: #3498db; /* Cor mais vibrante para a pontuação */
+}
+
+#ranking-list li span {
+    color: #777; /* Cor mais suave para informações adicionais */
 }
 
 #ranking-list li {
@@ -95,6 +115,11 @@ h1 {
     box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
     border-radius: 10px;
     text-align: left; /* Alinha o texto das questões à esquerda */
+    width: 80%; /* Reduz o tamanho do retângulo para 80% da largura disponível */
+    max-width: 600px; /* Define uma largura máxima para o retângulo */
+    display: block; /* Altera o comportamento padrão para ocupar toda a largura */
+    margin-left: auto; /* Centraliza horizontalmente */
+    margin-right: auto; /* Centraliza horizontalmente */
 }
 
 .question p {
@@ -115,7 +140,7 @@ h1 {
     margin-bottom: 10px; /* Espaçamento inferior entre as alternativas */
     position: relative; /* Adiciona uma posição relativa para sobrepor o estilo personalizado */
     display: block; /* Altera o comportamento padrão para ocupar toda a largura */
-   /* Adiciona espaço à esquerda das alternativas */
+    /* Adiciona espaço à esquerda das alternativas */
     padding-right: 1px;
 }
 
@@ -153,3 +178,4 @@ h1 {
 #submit-button:hover {
     background-color: #2980b9;
 }
+

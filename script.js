@@ -80,87 +80,46 @@ const rankingData = []; // Armazenar os dados do ranking
 
 let currentQuestionIndex = 0;
 let score = 0;
-let userEmail = ""; // Variável para armazenar o nome do usuário
+let userName = "";
+let userSeries = "";
 let isLoggedIn = false;
 
 const questionsContainer = document.getElementById("questions-container");
 const scoreElement = document.getElementById("score");
 
-const emailInput = document.getElementById("email");
-const passwordInput = document.getElementById("password");
-const loginButton = document.querySelector(".login-container button");
+const nameInput = document.getElementById("name");
+const seriesSelect = document.getElementById("series");
+const startButton = document.querySelector(".name-series-container button");
 const quizContainer = document.getElementById("quiz-container");
 const submitButton = document.getElementById("submit-button");
 const rankingContainer = document.getElementById("ranking-container");
 const rankingList = document.getElementById("ranking-list");
 
-loginButton.disabled = true; // Desativa o botão "Login"
+startButton.disabled = true; // Desativa o botão "Iniciar Quiz"
 quizContainer.style.display = "none"; // Oculta a seção do quiz
 rankingContainer.style.display = "none"; // Oculta a seção de ranking
 
-
-// Lista de emails e senhas
-const users = [
-    { email: "pedro.pereira63@portalsesisp.org.br", password: "12345678" },
-    { email: "vinicius.vasiliauskas@portalsesisp.org.br", password: "12345678" },
-    { email: "gabrielly.almeida@portalsesisp.org.br", password: "12345678" },
-    { email: "ana.borbalan@portalsesisp.org.br", password: "12345678" },
-    { email: "sthefany.souza@portalsesisp.org.br", password: "12345678" },
-    { email: "otavio.miranda3@portalsesisp.org.br", password: "12345678" },
-    { email: "maria.spontao@portalsesisp.org.br", password: "12345678" },
-    { email: "guilherme.moura3@portalsesisp.org.br", password: "12345678" },
-    { email: "laysa.veras@portalsesisp.org.br", password: "12345678" },
-    { email: "giovanni.sthal@portalsesisp.org.br", password: "12345678" },
-    { email: "eduardo.lopes@portalsesisp.org.br", password: "12345678" },
-    { email: "pedro.oliveira18@portalsesisp.org.br", password: "12345678" },
-    { email: "yasmin.santos47@portalsesisp.org.br", password: "12345678" },
-    { email: "livia.rocha8@portalsesisp.org.br", password: "12345678" },
-    { email: "ana.apolinario@portalsesisp.org.br", password: "12345678" },
-    { email: "daniel.caetano@portalsesisp.org.br", password: "12345678" },
-    { email: "talita.marcelino@portalsesisp.org.br", password: "12345678" },
-    { email: "matheus.barbosa9@portalsesisp.org.br", password: "12345678" },
-    { email: "kaua.pereira6@portalsesisp.org.br", password: "12345678" },
-    { email: "gustavo.lauria@portalsesisp.org.br", password: "12345678" },
-    { email: "matheus.andrade2@portalsesisp.org.br", password: "12345678" },
-    { email: "livia.silva85@portalsesisp.org.br", password: "12345678" },
-    { email: "kaleb.gaspar@portalsesisp.org.br", password: "12345678" },
-    { email: "bianca.mafra@portalsesisp.org.br", password: "12345678" }
-];
-
-function login() {
-    const email = emailInput.value.trim();
-    const password = passwordInput.value.trim();
-
-    // Verifica se o email e a senha correspondem a um usuário
-    const user = users.find(user => user.email === email && user.password === password);
-
-    if (user) {
-        // Extrai os dois primeiros nomes do email, separados por um ponto
-        const emailParts = user.email.split('@')[0].split('.');
-        const userName = emailParts[0];
-        const userLastName = emailParts[1];
-        userEmail = `${userName}.${userLastName}`; // Combina os dois primeiros nomes
-        isLoggedIn = true;
-        emailInput.disabled = true; // Desativa o campo de email após o login
-        passwordInput.disabled = true; // Desativa o campo de senha após o login
-        loginButton.style.display = "none"; // Oculta o botão "Login"
-
-        // Exibe a seção do quiz
-        quizContainer.style.display = "block";
-
-        // Carrega as questões e inicia o quiz
-        loadQuestions();
+nameInput.addEventListener("input", () => {
+    if (nameInput.value.trim() !== "") {
+        startButton.disabled = false; // Ativa o botão "Iniciar Quiz" quando o nome é inserido
     } else {
-        alert("Email ou senha incorretos. Tente novamente.");
+        startButton.disabled = true; // Desativa o botão se o nome for removido
     }
-}
+});
 
-emailInput.addEventListener("input", () => {
-    if (emailInput.value.trim() !== "") {
-        loginButton.disabled = false; // Ativa o botão "Login" quando o email é inserido
-    } else {
-        loginButton.disabled = true; // Desativa o botão se o email for removido
-    }
+startButton.addEventListener("click", () => {
+    userName = nameInput.value.trim();
+    userSeries = seriesSelect.value;
+    isLoggedIn = true;
+    nameInput.disabled = true; // Desativa o campo de nome após o início do quiz
+    seriesSelect.disabled = true; // Desativa o campo de série após o início do quiz
+    startButton.style.display = "none"; // Oculta o botão "Iniciar Quiz"
+
+    // Exibe a seção do quiz
+    quizContainer.style.display = "block";
+
+    // Carrega as questões e inicia o quiz
+    loadQuestions();
 });
 
 function loadQuestions() {
@@ -197,8 +156,8 @@ function loadQuestions() {
     // Exibe o botão "Verificar Respostas" após carregar as questões
     submitButton.style.display = "block";
 
-    // Oculta a seção de login após o início do quiz
-    document.querySelector(".login-container").style.display = "none";
+    // Oculta a seção de nome e série após o início do quiz
+    document.querySelector(".name-series-container").style.display = "none";
 }
 
 function checkAnswers() {
@@ -215,7 +174,7 @@ function checkAnswers() {
     });
 
     // Registra a pontuação no rankingData
-    rankingData.push({ name: userEmail, score: score });
+    rankingData.push({ name: userName, series: userSeries, score: score });
 
     showResult();
 }
@@ -231,7 +190,7 @@ function showResult() {
 
     rankingData.forEach((participant, index) => {
         const userScoreElement = document.createElement("li");
-        userScoreElement.textContent = `${index + 1}. ${participant.name}: ${participant.score} de ${questions.length}`;
+        userScoreElement.textContent = `${index + 1}. ${participant.name} (${participant.series}): ${participant.score} de ${questions.length}`;
         rankingList.appendChild(userScoreElement);
     });
 
